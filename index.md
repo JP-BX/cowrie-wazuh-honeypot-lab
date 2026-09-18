@@ -2,8 +2,6 @@
 layout: default
 ---
 
-# SSH Honeypot Threat Detection & Monitoring with Cowrie and Wazuh
-
 SSH honeypot lab using Cowrie and Wazuh SIEM to capture, centralize, and analyze simulated attacker activity.
 
 ## Project Overview
