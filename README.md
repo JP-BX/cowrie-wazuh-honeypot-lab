@@ -66,3 +66,29 @@ The commands included:
 - `cat /etc/passwd` — viewed local account information
   
   <img width="1169" height="719" alt="image" src="https://github.com/user-attachments/assets/79596903-3642-4745-9627-631bc1011460" />
+The simulated SSH session successfully interacted with Cowrie's emulated environment. Commands executed during the session were captured by the honeypot, providing telemetry that could later be forwarded to Wazuh for centralized monitoring and analysis.
+## Cowrie Event Capture
+Cowrie recorded the simulated SSH session and generated detailed event logs containing connection information, session activity, and commands executed within the honeypot.
+
+<img width="412" height="767" alt="image" src="https://github.com/user-attachments/assets/c9d2ab50-05c2-4350-bdbc-31f2b32e3e47" />
+
+The Cowrie logs confirmed that each command executed during the simulated SSH session was captured successfully. The logs also recorded session lifecycle information, including the SSH connection, command activity, TTY logging, and session termination.
+## Wazuh Deployment
+
+To centralize and analyze the honeypot telemetry, I deployed a Wazuh server on a separate Ubuntu Server virtual machine. The Wazuh installation included the Wazuh Manager, Wazuh Indexer, Filebeat, and Wazuh Dashboard.
+
+<img width="1197" height="750" alt="image" src="https://github.com/user-attachments/assets/3c2e6fd8-c09d-4de2-9090-6588344f3b2f" />
+
+The installation output confirmed that the Wazuh Indexer, Wazuh Manager, Filebeat, and Wazuh Dashboard were successfully installed and started.
+## Wazuh Agent Integration
+
+After deploying the Wazuh server, I connected the Kali Linux honeypot system to the Wazuh Manager using the Wazuh Agent.
+
+<img width="822" height="259" alt="image" src="https://github.com/user-attachments/assets/e9770ee6-4aad-4253-89ab-0b3de4595735" />
+The Wazuh Manager confirmed that the Kali Linux agent was successfully registered and active. This established communication between the Cowrie honeypot system and the centralized Wazuh server.
+
+The agent was configured to monitor Cowrie's JSON log file located at:
+
+`/home/cowrie/cowrie/var/log/cowrie/cowrie.json`
+
+This allowed Cowrie telemetry generated on the honeypot to be forwarded to the Wazuh Manager for centralized processing and analysis.
