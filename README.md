@@ -24,3 +24,45 @@ Rather than using a preconfigured honeypot platform, I manually configured the C
 - SSH
 - Linux CLI
 - JSON log analysis
+  
+## Architecture
+
+The lab was designed to capture simulated SSH activity on the Cowrie honeypot and forward the resulting telemetry through Wazuh for centralized analysis.
+
+### Event Flow
+
+1. A simulated SSH connection is made to the Cowrie honeypot.
+2. Cowrie records authentication attempts, sessions, and executed commands.
+3. Events are written to `cowrie.json`.
+4. The Wazuh Agent monitors the Cowrie JSON log.
+5. The agent forwards the telemetry to the Wazuh Manager.
+6. Filebeat forwards archived Wazuh events to the Wazuh Indexer.
+7. The events become searchable in the Wazuh Dashboard.
+
+**Pipeline:**
+
+`SSH Activity → Cowrie → cowrie.json → Wazuh Agent → Wazuh Manager → Filebeat → Wazuh Indexer → Wazuh Dashboard`
+
+## Cowrie Honeypot Deployment
+Cowrie was deployed on a Kali Linux virtual machine to simulate a vulnerable SSH service. The honeypot was configured to listen for SSH connections on TCP port `2222` while recording authentication attempts, session information, and commands executed within the simulated environment.
+
+### Verifying the Cowrie Service
+
+After installation and configuration, I verified that the Cowrie service was running successfully and listening for SSH connections on TCP port 2222.
+
+<img width="469" height="131" alt="image" src="https://github.com/user-attachments/assets/5147c335-8bd7-4e66-9afc-58883d668e38" />
+
+The service status confirmed that Cowrie was running, while the `ss` command verified that port 2222 was listening on `0.0.0.0`, confirming that the honeypot was ready to accept SSH connections.
+
+## Simulated SSH Activity
+
+To validate the honeypot, I initiated a simulated SSH session against Cowrie on TCP port 2222. After establishing the connection, I executed several common Linux reconnaissance commands to generate realistic command telemetry.
+
+The commands included:
+
+- `whoami` — identified the current user
+- `uname -a` — retrieved operating system and kernel information
+- `ls -la` — enumerated files and directories
+- `cat /etc/passwd` — viewed local account information
+  
+  <img width="1169" height="719" alt="image" src="https://github.com/user-attachments/assets/79596903-3642-4745-9627-631bc1011460" />
