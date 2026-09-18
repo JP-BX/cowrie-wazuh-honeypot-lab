@@ -122,7 +122,7 @@ The Filebeat service was confirmed to be active and running. I also queried the 
 To make the complete Cowrie telemetry searchable in the Wazuh Dashboard, I enabled archive indexing and created the `wazuh-archives-*` index pattern.
 
 This allowed archived Cowrie events to be queried directly using structured fields such as `data.eventid`, `data.input`, `data.src_ip`, `data.protocol`, and `agent.name`.
-<img width="1913" height="735" alt="image" src="https://github.com/user-attachments/assets/23a320bd-07fb-417b-a1b4-897f4b222d48" />
+<img src="https://github.com/user-attachments/assets/126d7aa3-ecf1-4d45-b68f-8a83c2406abe" alt="Wazuh Discover dashboard displaying indexed Cowrie SSH command events" style="width:100%; height:auto; display:block;" />
 The Wazuh Discover results confirmed that simulated SSH commands captured by Cowrie were successfully collected, forwarded, indexed, and made searchable in Wazuh. Filtering for `cowrie.command.input` displayed commands such as `whoami`, `hostname`, and `exit`, validating the complete telemetry pipeline from the honeypot to centralized security analysis.
 ## End-to-End Validation
 
