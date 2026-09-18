@@ -92,3 +92,62 @@ The agent was configured to monitor Cowrie's JSON log file located at:
 `/home/cowrie/cowrie/var/log/cowrie/cowrie.json`
 
 This allowed Cowrie telemetry generated on the honeypot to be forwarded to the Wazuh Manager for centralized processing and analysis.
+## Cowrie Log Monitoring
+
+The Wazuh Agent was configured to monitor Cowrie's JSON event log using Wazuh's log collection capabilities.
+
+I verified the configuration through the Wazuh agent logs, which confirmed that Wazuh was actively analyzing the Cowrie log file:
+`/home/cowrie/cowrie/var/log/cowrie/cowrie.json`
+
+<img width="972" height="117" alt="image" src="https://github.com/user-attachments/assets/6c5dee99-c65f-4b25-811e-a491718d9c53" />
+The Wazuh Agent logs confirmed that the Cowrie JSON file was actively being monitored. This verified that honeypot telemetry was being collected by the agent and prepared for forwarding to the Wazuh Manager.
+## Wazuh Event Forwarding
+
+After confirming that the Wazuh Agent was monitoring the Cowrie log, I verified that the honeypot events were successfully forwarded to the Wazuh Manager.
+
+The received Cowrie events were stored in Wazuh's archived event data, preserving details such as the session ID, protocol, source and destination information, Cowrie event type, and event message.
+<img width="1047" height="438" alt="image" src="https://github.com/user-attachments/assets/ff0f6c8a-cb4f-4903-9c83-0d106e6c860f" />
+The archived events confirmed that Cowrie telemetry was successfully forwarded from the Kali Linux honeypot to the Wazuh Manager. The events retained the original Cowrie session data and were stored in Wazuh's `archives.json`, confirming successful end-to-end log forwarding between the two systems.
+## Filebeat and Event Indexing
+
+After verifying that Cowrie events were reaching the Wazuh Manager, I configured Filebeat to forward the archived Wazuh events to the Wazuh Indexer.
+
+I verified that the Filebeat service was enabled and actively running, confirming that the event forwarding component of the indexing pipeline was operational.
+<img width="1877" height="421" alt="image" src="https://github.com/user-attachments/assets/e340f5aa-748d-49d0-b5b3-a5beb6f8ce53" />
+The Filebeat service was confirmed to be active and running. I also queried the Wazuh Indexer and verified that the `wazuh-alerts` index was healthy and contained indexed documents, confirming that the Wazuh indexing pipeline was operational.
+## Archive Indexing and Security Analysis
+
+To make the complete Cowrie telemetry searchable in the Wazuh Dashboard, I enabled archive indexing and created the `wazuh-archives-*` index pattern.
+
+This allowed archived Cowrie events to be queried directly using structured fields such as `data.eventid`, `data.input`, `data.src_ip`, `data.protocol`, and `agent.name`.
+<img width="1913" height="735" alt="image" src="https://github.com/user-attachments/assets/23a320bd-07fb-417b-a1b4-897f4b222d48" />
+The Wazuh Discover results confirmed that simulated SSH commands captured by Cowrie were successfully collected, forwarded, indexed, and made searchable in Wazuh. Filtering for `cowrie.command.input` displayed commands such as `whoami`, `hostname`, and `exit`, validating the complete telemetry pipeline from the honeypot to centralized security analysis.
+## End-to-End Validation
+
+The final validation confirmed that the complete monitoring pipeline was functioning successfully.
+
+Simulated SSH activity was captured by Cowrie, written to the Cowrie JSON event log, collected by the Wazuh Agent, forwarded to the Wazuh Manager, indexed through Filebeat, and made searchable within the Wazuh Dashboard.
+
+`SSH Activity → Cowrie → cowrie.json → Wazuh Agent → Wazuh Manager → Filebeat → Wazuh Indexer → Wazuh Dashboard`
+
+This demonstrated a complete security monitoring workflow from attacker interaction and telemetry generation through centralized log collection, indexing, and analysis.
+## Skills Demonstrated
+
+- SSH honeypot deployment and configuration
+- Linux system administration
+- Security log collection and analysis
+- Wazuh SIEM/XDR deployment
+- Wazuh Agent and Manager integration
+- JSON telemetry analysis
+- Filebeat configuration and event forwarding
+- Security event indexing and querying
+- Troubleshooting end-to-end logging pipelines
+- Simulated attacker activity and command analysis
+
+## Project Outcome
+
+This project successfully demonstrated an end-to-end threat monitoring pipeline using Cowrie and Wazuh.
+
+Simulated SSH activity was captured by the Cowrie honeypot and transformed into structured security telemetry. The events were collected by the Wazuh Agent, forwarded to the Wazuh Manager, indexed, and analyzed through the Wazuh Dashboard.
+
+The completed lab provided hands-on experience with honeypot deployment, SIEM integration, centralized logging, event indexing, security monitoring, and troubleshooting across multiple Linux systems.
