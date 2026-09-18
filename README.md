@@ -131,6 +131,15 @@ Simulated SSH activity was captured by Cowrie, written to the Cowrie JSON event 
 `SSH Activity → Cowrie → cowrie.json → Wazuh Agent → Wazuh Manager → Filebeat → Wazuh Indexer → Wazuh Dashboard`
 
 This demonstrated a complete security monitoring workflow from attacker interaction and telemetry generation through centralized log collection, indexing, and analysis.
+## Challenges & Troubleshooting
+
+During the integration, Cowrie events were successfully collected by the Wazuh Agent and forwarded to the Wazuh Manager, but the full Cowrie telemetry was not initially visible in the Wazuh Dashboard.
+
+I verified each stage of the pipeline individually by checking Cowrie logs, Wazuh agent log collection, archived events on the Wazuh Manager, Filebeat status, and Wazuh index data.
+
+The issue was resolved by enabling Wazuh archive indexing and configuring the `wazuh-archives-*` index pattern. This made the complete Cowrie JSON telemetry searchable in Wazuh Discover.
+
+This troubleshooting process demonstrated the importance of validating each component of a security logging pipeline independently rather than assuming that successful log collection means the events are immediately available for analysis.
 ## Skills Demonstrated
 
 - SSH honeypot deployment and configuration
